@@ -23,6 +23,9 @@ function ENT:Initialize()
 end
 
 function ENT:KeyValue(k, v)
+    if (string.lower(k) == "skin") then
+        self:SetSkin(tonumber(v))
+    end
     if k == "OnPressed" or k == "OnButtonReset" then
         self:StoreOutput(k, v)
     end

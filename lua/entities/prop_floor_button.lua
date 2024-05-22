@@ -12,12 +12,16 @@ ENT.Downed = false
 
 function ENT:Initialize()
     if CLIENT then return end
-    self:SetModel("models/props/portal_button.mdl")
+    --self:SetModel("models/props/portal_button.mdl") -- we do this later
     self:PhysicsInit(SOLID_NONE)
     self:SetMoveType(MOVETYPE_NONE)
 end
 
 function ENT:KeyValue(k, v)
+    if k == "model" then
+        self:SetModel(v)
+    end
+
     if k == "OnPressed" or k == "OnUnPressed" then
         self:StoreOutput(k, v)
     end
@@ -40,14 +44,15 @@ function ENT:Up()
 end
 
 function ENT:Think()
-    elf:NextThink(CurTime())
+    self:NextThink(CurTime())
     if CLIENT then return true end
     local yee = {
         start = self:GetPos(),
         endpos = self:GetPos(),
         mins = Vector(-20,-20,-0),
         maxs = Vector(20,20,10),
-        filter = self
+        filter = self,
+        ignoreworld = true
     }
     local tr = util.TraceHull(yee)
     if IsValid(tr.Entity) then
